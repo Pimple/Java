@@ -6,7 +6,7 @@ public class EquivalenceRelaterer
 	{
 		int[][] matrix = new int[][]
 			{
-				{ 1, 1, 1, 0, 0 },
+				{ 0, 1, 1, 0, 0 },
 				{ 1, 1, 0, 0, 1 },
 				{ 1, 0, 1, 1, 0 },
 				{ 0, 0, 1, 1, 0 },
@@ -42,18 +42,25 @@ public class EquivalenceRelaterer
 		
 		for (int i = 0; i < columns; i++)
 		{
-			int j = 0;
 			if (matrix[0][0] != matrix[i][i])
 			{
-				System.out.println("(" + i + "," + j + ") was found not to be reflexive!");
+				System.out.println("(" + i + "," + i + ") was found not to be reflexive!");
 				reflexive = false;
 			}
-			for (j = 0; j < rows; j++)
+			for (int j = 0; j < rows; j++)
 			{
 				if (matrix[i][j] != matrix[j][i])
 				{
 					System.out.println("(" + i + "," + j + ") and " + "(" + j + "," + i + ") are not symmetric!");
 					symmetric = false;
+				}
+				if (i != j)
+				{
+					int cursor = matrix[i][j];
+					while (cursor == 1)
+					{
+						
+					}
 				}
 			}
 		}
