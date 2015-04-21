@@ -1,17 +1,30 @@
 package aPackage;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class EquivalenceRelaterer
 {
 	public static void main(String[] args)
 	{
+//		int[][] matrix = new int[][]
+//			{
+//				{ 1, 1, 1, 0, 0 },
+//				{ 1, 1, 0, 0, 1 },
+//				{ 1, 0, 1, 1, 0 },
+//				{ 0, 0, 1, 1, 0 },
+//				{ 0, 1, 0, 0, 1 }
+//			};
 		int[][] matrix = new int[][]
-			{
-				{ 0, 1, 1, 0, 0 },
-				{ 1, 1, 0, 0, 1 },
-				{ 1, 0, 1, 1, 0 },
-				{ 0, 0, 1, 1, 0 },
-				{ 0, 1, 0, 0, 1 }
-			};
+				{
+					{ 1, 1, 1, 1, 1 },
+					{ 1, 1, 1, 1, 1 },
+					{ 1, 1, 1, 1, 1 },
+					{ 1, 1, 1, 1, 1 },
+					{ 1, 0, 1, 0, 1 }
+				};
 		
 		printMatrix(matrix);
 		System.out.println("\nYou think this is an equivalence relation? " + isEquivalenceRelation(matrix) + ".");
@@ -38,13 +51,13 @@ public class EquivalenceRelaterer
 		int rows = matrix.length;
 		boolean symmetric = true;
 		boolean reflexive = true;
-		boolean transitive = true; // TODO
+		boolean transitive = true;
 		
 		for (int i = 0; i < columns; i++)
 		{
 			if (matrix[0][0] != matrix[i][i])
 			{
-				System.out.println("(" + i + "," + i + ") was found not to be reflexive!");
+				System.out.println("(" + i + "," + i + ") was found not to match (0,0); therefore, the matrix is not reflexive!");
 				reflexive = false;
 			}
 			for (int j = 0; j < rows; j++)
@@ -55,16 +68,63 @@ public class EquivalenceRelaterer
 					symmetric = false;
 				}
 				if (i != j)
-				{
-					int cursor = matrix[i][j];
-					while (cursor == 1)
-					{
-						
-					}
-				}
+					if (!isHerpDerp(matrix, j, i, j, rows, columns, new ArrayList<String>()))
+						transitive = false;
 			}
 		}
 		return symmetric && reflexive && transitive;
+	}
+	
+	private static boolean isHerpDerp(int[][] matrix, int toCheck, int origY, int origX, int rows, int columns, List<String> alreadyChecked)
+	{
+		for (int i = 0; i < columns; i++)
+			if (matrix[toCheck][i] == 1)
+			{
+				boolean check = true;
+				for (String string : alreadyChecked)
+					if (string.contains(origY + "") && string.contains(i + ""))
+					{
+						check = false;
+						break;
+					}
+				
+				if (check)
+					if (matrix[origY][i] == 1)
+					{
+						alreadyChecked.add(origY + ":" + i);
+						if (!isHerpDerp(matrix, i, origY, origX, rows, columns, alreadyChecked))
+						{
+							System.out.println("Checking transition path from (" + origY + "," + origX + "), the matrix was "
+									+ "found to be untransitive in (" + toCheck + "," + i + ")!");
+							return false;
+						}
+					}
+					else
+					{
+						System.out.println("Checking transition path from (" + origY + "," + origX + "), the matrix was "
+								+ "found to be untransitive in (" + toCheck + "," + i + ")!");
+						return false;
+					}
+			}
+		return true;
+	}
+	
+	private static boolean isTransitive(int[][] matrix, int y, int x, int rows, int columns)
+	{
+		boolean transitive = true;
+		
+		for (int i = x; i < columns; i++)
+			if (i != x)
+				if (matrix[x][i] == 1)
+					transitive = isTransitive(matrix, i, y, rows, columns);
+				else
+				{
+					transitive = false;
+					System.out.println("Matching (" + y + "," + x + ") against (" + y + "," + i + "), "
+							+ "the matrix was found not to be transitive!");
+				}
+		
+		return transitive;
 	}
 	
 	private static void printMatrix(int[][] matrix)
