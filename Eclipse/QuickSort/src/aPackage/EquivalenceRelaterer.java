@@ -9,41 +9,28 @@ public class EquivalenceRelaterer
 {
 	public static void main(String[] args)
 	{
-//		int[][] matrix = new int[][]
-//			{
-//				{ 1, 1, 1, 0, 0 },
-//				{ 1, 1, 0, 0, 1 },
-//				{ 1, 0, 1, 1, 0 },
-//				{ 0, 0, 1, 1, 0 },
-//				{ 0, 1, 0, 0, 1 }
-//			};
 		int[][] matrix = new int[][]
 				{
 					{ 1, 1, 1, 1, 1 },
 					{ 1, 1, 1, 1, 1 },
-					{ 1, 1, 1, 1, 1 },
+					{ 1, 1, 0, 1, 1 },
 					{ 1, 1, 1, 1, 1 },
 					{ 1, 0, 1, 0, 1 }
 				};
 		
-		printMatrix(matrix);
-		System.out.println("\nYou think this is an equivalence relation? " + isEquivalenceRelation(matrix) + ".");
+		// printMatrix(matrix);
+		// System.out.println("\nYou think this is an equivalence relation? " + isEquivalenceRelation(matrix) + ".");
+		
+		QuickSorterer sorter = new QuickSorterer();
+		List<Integer> ints = new ArrayList<Integer>();
+		ints.add(5);
+		ints.add(1);
+		ints.add(2412);
+		ints.add(3);
+		ints.add(34);
+		sorter.sort(ints);
+		System.out.println(ints);
 	}
-	
-//	Point[] list = new Point[5];
-//	...
-//	for (int i=0; i<list.length; i++) {
-//	    // checking Reflexive
-//	    if (list[i].x == list[i].y) System.out.println("Reflexive" + list[i]);
-//	    for (int j=i+1; j<list.length; j++) {
-//	        // checking Symmetric
-//	        if (list[i].x == list[j].y && list[i].y == list[j].x) ...
-//	        for (int k=j+1; k<list.length; k++) {
-//	            // checking Transitive
-//	            if (list[i].x == list[k].x && list[i].y == list[j].x && ...
-//	        }
-//	    }
-//	}
 	
 	private static boolean isEquivalenceRelation(int[][] matrix)
 	{
@@ -55,9 +42,9 @@ public class EquivalenceRelaterer
 		
 		for (int i = 0; i < columns; i++)
 		{
-			if (matrix[0][0] != matrix[i][i])
+			if (matrix[i][i] != 1)
 			{
-				System.out.println("(" + i + "," + i + ") was found not to match (0,0); therefore, the matrix is not reflexive!");
+				System.out.println("(" + i + "," + i + ") is not true, so the matrix isn't reflexive!");
 				reflexive = false;
 			}
 			for (int j = 0; j < rows; j++)
@@ -78,7 +65,7 @@ public class EquivalenceRelaterer
 	private static boolean isHerpDerp(int[][] matrix, int toCheck, int origY, int origX, int rows, int columns, List<String> alreadyChecked)
 	{
 		for (int i = 0; i < columns; i++)
-			if (matrix[toCheck][i] == 1)
+			if (matrix[toCheck][i] == 1 && !(toCheck == origX && i == origY))
 			{
 				boolean check = true;
 				for (String string : alreadyChecked)
@@ -107,24 +94,6 @@ public class EquivalenceRelaterer
 					}
 			}
 		return true;
-	}
-	
-	private static boolean isTransitive(int[][] matrix, int y, int x, int rows, int columns)
-	{
-		boolean transitive = true;
-		
-		for (int i = x; i < columns; i++)
-			if (i != x)
-				if (matrix[x][i] == 1)
-					transitive = isTransitive(matrix, i, y, rows, columns);
-				else
-				{
-					transitive = false;
-					System.out.println("Matching (" + y + "," + x + ") against (" + y + "," + i + "), "
-							+ "the matrix was found not to be transitive!");
-				}
-		
-		return transitive;
 	}
 	
 	private static void printMatrix(int[][] matrix)
